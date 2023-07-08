@@ -1,8 +1,19 @@
+-- CREATE TYPE record AS (
+--     nomepessoa VARCHAR(100),
+--     salario FLOAT,
+--     nomeministerio VARCHAR(100),
+--     nomesecretaria VARCHAR(100),
+--     funcaoministerio VARCHAR(100),
+--     funcaosecretaria VARCHAR(100),
+--     nomecargopolitico VARCHAR(100),
+--     ufatuacao VARCHAR(2),
+--     nomepartido VARCHAR(100)
+-- );
+
 create or replace function analisarDadosPessoa(f_cpf varchar)
 returns record as
 $$
-declare
-	f_cpf varchar(11);
+declare 
 	f_nomepessoa varchar(100);
 	f_salario float;
 	f_nomeministerio varchar(100);
@@ -21,13 +32,11 @@ begin
 	where pessoa.cpf = f_cpf;
 	
 	SELECT
-    	servidorpublico.salario 
-	INTO 
-		f_salario
+    	servidorpublico.salario INTO f_salario
 	FROM servidorpublico
 	WHERE servidorpublico.cpf = f_cpf;
 	
-	if(f_salario is not NULL) then
+	if(f_salario is not NULL) then  -- é um servidor público
 		SELECT
 			ministerio.nomeministerio,
 			secretaria.nomesecretaria,
@@ -43,19 +52,12 @@ begin
 		inner join secretaria on secretaria.codsecretaria = servidorpublico.codsecretaria
 		WHERE
 			servidorpublico.cpf = f_cpf;
-
 		
-		if (f_funcaoministerio is not null) then
-			resultado := row(f_nomepessoa, f_nomeministerio, f_funcaoministerio, f_salario);
-			return resultado;
-		
-		else 			
-			resultado := row(f_nomepessoa, f_nomeministerio, f_nomesecretaria, f_funcaosecretaria, f_salario);			
-			return resultado;
-			
-		end if;
+		f_nomecargopolitico := NULL;  
+		f_nomepartido := NULL; 
+		f_ufatuacao := NULL;
 	
-	else 
+	else -- é um agente político
 		SELECT
 			cargopolitico.salario,
 			cargopolitico.nome,
@@ -71,11 +73,16 @@ begin
 		INNER JOIN partido ON partido.codpartido = agentepolitico.codpartido
 		WHERE agentepolitico.cpf = f_cpf;
 
+        f_nomeministerio := NULL;
+        f_nomesecretaria := NULL;
+        f_funcaoministerio := NULL;
+        f_funcaosecretaria := NULL;
 		
-		resultado := row(f_nomepessoa, f_nomecargopolitico, f_nomepartido, f_ufatuacao, f_salario);
-		return resultado;
 		
 	end if;
+	
+	resultado := row(f_nomepessoa, f_salario, f_nomeministerio, f_nomesecretaria, f_funcaoministerio, f_funcaosecretaria, f_nomecargopolitico, f_ufatuacao, f_nomepartido);
+    RETURN resultado;
 	
 END
 $$
