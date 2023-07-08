@@ -1,20 +1,15 @@
-
 CREATE OR REPLACE FUNCTION CassarCandidatura(f_nomepartido varchar(100)) 
     RETURNS BOOL AS 
 $$
 BEGIN
-    UPDATE statusCandidadtura
+    UPDATE candidatura
     SET codStatusCandidatura = 3
-    FROM candidatura
-    INNER JOIN agentepolitico ON agentepolitico.cpf = candidatura.cpf
+    FROM agentepolitico
     INNER JOIN partido ON partido.codpartido = agentepolitico.codpartido
-    WHERE partido.nome = f_nomepartido;
+    WHERE agentepolitico.cpf = candidatura.cpf
+        AND partido.nome = f_nomepartido;
 
     RETURN TRUE;
 END;
 $$
 LANGUAGE plpgsql;
-
-
-
-    
