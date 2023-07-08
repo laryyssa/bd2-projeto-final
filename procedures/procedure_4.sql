@@ -1,19 +1,3 @@
-
-
--- CREATE TYPE record AS (
---     f_nomepessoa VARCHAR(100),
---     f_salario FLOAT,
---     f_nomeministerio VARCHAR(100),
---     f_nomesecretaria VARCHAR(100),
---     f_funcaoministerio VARCHAR(100),
---     f_funcaosecretaria VARCHAR(100),
---     f_nomecargopolitico VARCHAR(100),
---     f_ufatuacao VARCHAR(2),
---     f_nomepartido VARCHAR(100)
--- );
-
--- DROP FUNCTION IF EXISTS analisarDadosPessoa;
-
 create or replace function analisarDadosPessoa(f_cpf varchar)
 returns record as
 $$
@@ -96,13 +80,3 @@ begin
 END
 $$
 LANGUAGE plpgsql;
-
-select analisarDadosPessoa('08356724333')
-
--- select * from agentepolitico
--- select * from candidatura
--- select * from servidorpublico
--- select * from ministerio
--- select * from secretaria
--- select * from cargopolitico
--- select * from partido
