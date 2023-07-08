@@ -1,88 +1,108 @@
--- Função analise Pessoa 
--- entra CPF; 
--- Se for Agente político: retorna salário, cargo
--- Se for Servidor público: retorna salário, nome Secretaria
+
+
+-- CREATE TYPE record AS (
+--     f_nomepessoa VARCHAR(100),
+--     f_salario FLOAT,
+--     f_nomeministerio VARCHAR(100),
+--     f_nomesecretaria VARCHAR(100),
+--     f_funcaoministerio VARCHAR(100),
+--     f_funcaosecretaria VARCHAR(100),
+--     f_nomecargopolitico VARCHAR(100),
+--     f_ufatuacao VARCHAR(2),
+--     f_nomepartido VARCHAR(100)
+-- );
+
+-- DROP FUNCTION IF EXISTS analisarDadosPessoa;
 
 create or replace function analisarDadosPessoa(f_cpf varchar)
 returns record as
 $$
 declare
-	f_cpf varchar,
-	f_codcargopolitico int,
-	f_funcaosecretaria varchar,
-	f_salario float,
-	f_nome varchar,
-	f_codpartidopolitico int,
+	f_cpf varchar(11);
+	f_nomepessoa varchar(100);
+	f_salario float;
+	f_nomeministerio varchar(100);
+	f_nomesecretaria varchar(100);
+	f_funcaoministerio varchar(100);
+	f_funcaosecretaria varchar(100);
+	f_nomecargopolitico varchar(100);
+	f_ufatuacao varchar(2);
+	f_nomepartido varchar(100);
 	resultado record;
 begin
 	
-	select 
-		salario into f_salario,
-	from servidorpublico 
-	where servidorpublico.cpf = f_cpf
-	
 	select
-		nome into f_nome
-	from pessoa ps
-	where pessoa.cpf = f_cpf
+		nome into f_nomepessoa
+	from pessoa
+	where pessoa.cpf = f_cpf;
 	
+	SELECT
+    	servidorpublico.salario 
+	INTO 
+		f_salario
+	FROM servidorpublico
+	WHERE servidorpublico.cpf = f_cpf;
 	
-	if(f_salario is not NULL)
-		select
-			codministerio into f_codminiterio,
-			codsecretaria into f_codsecretaria,
-			funcaoministerio into f_funcaoministerio,
-			funcaosecretaria into f_funcaosecretaria;
-		from servidorpublico 
-		where servidorpublico.cpf = f_cpf
+	if(f_salario is not NULL) then
+		SELECT
+			ministerio.nomeministerio,
+			secretaria.nomesecretaria,
+			servidorpublico.funcaoministerio,
+			servidorpublico.funcaosecretaria
+		INTO
+			f_nomeministerio,
+			f_nomesecretaria,
+			f_funcaoministerio,
+			f_funcaosecretaria
+		FROM servidorpublico
+		inner join ministerio on ministerio.codministerio = servidorpublico.codministerio
+		inner join secretaria on secretaria.codsecretaria = servidorpublico.codsecretaria
+		WHERE
+			servidorpublico.cpf = f_cpf;
+
 		
-		if (f_codministerio is not null)
-			select 
-				nomeministerio into f_nomeministerio
-			from ministerio 
-			where ministerio.codministerio = f_codministerio;
-			
-			resultado := row(f_nome, f_nomeministerio, f_funcaoministerio, f_salario)
+		if (f_funcaoministerio is not null) then
+			resultado := row(f_nomepessoa, f_nomeministerio, f_funcaoministerio, f_salario);
 			return resultado;
-		else 		
-			select 
-				nomesecretaria into f_nomesecretaria
-				nomeministerio into f_nomeministerio
-			from secretaria 
-			inner join ministerio as ministerio.codministerio = secretaria.codministerio
-			where secretaria.codsecretaria = f_codsecretaria
+		
+		else 			
+			resultado := row(f_nomepessoa, f_nomeministerio, f_nomesecretaria, f_funcaosecretaria, f_salario);			
+			return resultado;
 			
-			resultado := row(f_nome, f_nomeministerio, f_nomesecretaria, f_funcaosecretaria, f_salario)			
-			return resultado		
-		end if
+		end if;
 	
 	else 
-		select 
-			cargopolitico.salario into f_salario,
-			cargopolitico.nome into f_nomecargopolitico,
-			cargopolitico.uf into f_ufatuacao
-		from agentepolitico
-		inner join cargopolitico as cargopolitico.codcargopolitico = agentepolitico.codcargopolitico
-		where agentepolitico.cpf = f_cpf;
+		SELECT
+			cargopolitico.salario,
+			cargopolitico.nome,
+			cargopolitico.uf,
+			partido.nome
+		INTO
+			f_salario,
+			f_nomecargopolitico,
+			f_ufatuacao,
+			f_nomepartido
+		FROM agentepolitico
+		INNER JOIN cargopolitico ON cargopolitico.codcargopolitico = agentepolitico.codcargopolitico
+		INNER JOIN partido ON partido.codpartido = agentepolitico.codpartido
+		WHERE agentepolitico.cpf = f_cpf;
+
 		
-		
-		
-		
-		select
-			salario into f_salario
-		from cargopolitico 
-		inner join agentepolitico as agentepolitico.codcargopolitico = cargopolitico.codcargopolitico
-		where 
-			ap.cpf = f_cpf
-		
+		resultado := row(f_nomepessoa, f_nomecargopolitico, f_nomepartido, f_ufatuacao, f_salario);
+		return resultado;
 		
 	end if;
 	
-end
+END
+$$
+LANGUAGE plpgsql;
 
-select * from agentepolitico
-select * from candidatura
-select * from servidorpublico
-select * from ministerio
-select * from secretaria
-select * from cargopolitico
+select analisarDadosPessoa('08356724333')
+
+-- select * from agentepolitico
+-- select * from candidatura
+-- select * from servidorpublico
+-- select * from ministerio
+-- select * from secretaria
+-- select * from cargopolitico
+-- select * from partido
