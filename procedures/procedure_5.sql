@@ -26,24 +26,27 @@ begin
 		pessoa.nome = f_nomepessoa and
 		cpi.nomecpi = f_nomecpi;
 		
-	IF (f_codcandidatura IS NOT NULL) AND (f_codcpi IS NOT NULL) THEN
+	IF (f_codcandidatura IS NOT NULL) AND (f_codcpi IS NOT NULL) THEN -- and ou or?
 		RETURN False;
 	
 	else 
-		SELECT MAX(codcpi) into max_cod
-		FROM candidaturacpi;
-
-		max_cod := max_cod + 1;
-		
 		select codcandidatura into f_codcandidatura
 		from candidatura
 		inner join pessoa on pessoa.cpf = candidatura.cpf
 		where pessoa.nome = f_nomepessoa;
 		
 		if (f_codcandidatura is not null) then
+			SELECT MAX(codcpi) into max_cod
+			FROM candidaturacpi;
+
+			max_cod := max_cod + 1; -- criação automática do cod da cpi
+			
+			INSERT INTO cpi (codcpi, nomecpi)
+			VALUES (max_cod, f_nomecpi);
+			
 			INSERT INTO candidaturacpi (codcandidatura, codcpi)
 			VALUES (f_codcandidatura, max_cod);
-			
+						
 			return True;
 		else
 			return False;
