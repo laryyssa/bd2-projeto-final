@@ -100,7 +100,7 @@ CREATE TABLE AgentePolitico (
     CONSTRAINT AgentePolitico_Governo_codGoverno_fk
         FOREIGN KEY (codGoverno) REFERENCES Governo (codGoverno),
     CONSTRAINT AgentePolitico_Ministerio_codMinisterio_fk
-        FOREIGN KEY (codMinisterio) REFERENCES Ministerio (cFFodMinisterio),
+        FOREIGN KEY (codMinisterio) REFERENCES Ministerio (codMinisterio),
     CONSTRAINT AgentePolitico_Partido_codPartido_fk
         FOREIGN KEY (codPartido) REFERENCES Partido (codPartido),
     CONSTRAINT AgentePolitico_Secretaria_codSecretaria_fk
