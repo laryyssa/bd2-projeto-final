@@ -53,9 +53,9 @@ begin
 		WHERE
 			servidorpublico.cpf = f_cpf;
 		
-		f_nomecargopolitico := NULL;  
-		f_nomepartido := NULL; 
-		f_ufatuacao := NULL;
+		f_nomecargopolitico := 'sem_cargo_politico';  
+		f_nomepartido := 'sem_partido'; 
+		f_ufatuacao := 'sem_atuacao_em_estado';
 	
 	else -- é um agente político
 		SELECT
@@ -73,10 +73,10 @@ begin
 		INNER JOIN partido ON partido.codpartido = agentepolitico.codpartido
 		WHERE agentepolitico.cpf = f_cpf;
 
-        f_nomeministerio := NULL;
-        f_nomesecretaria := NULL;
-        f_funcaoministerio := NULL;
-        f_funcaosecretaria := NULL;
+        f_nomeministerio := 'sem_ministerio';
+        f_nomesecretaria := 'sem_secretaria';
+        f_funcaoministerio := 'sem_funcao_em_ministerio';
+        f_funcaosecretaria := 'sem_funcao_em_secretaria';
 		
 		
 	end if;

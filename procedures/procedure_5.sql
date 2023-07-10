@@ -26,7 +26,7 @@ begin
 		pessoa.nome = f_nomepessoa and
 		cpi.nomecpi = f_nomecpi;
 		
-	IF (f_codcandidatura IS NOT NULL) AND (f_codcpi IS NOT NULL) THEN -- and ou or?
+	IF (f_codcandidatura IS NOT NULL) AND (f_codcpi IS NOT NULL) THEN 
 		RETURN False;
 	
 	else 
