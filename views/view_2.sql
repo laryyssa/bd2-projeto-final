@@ -1,11 +1,20 @@
 CREATE VIEW ListaServidores AS
-SELECT 
+SELECT
     CONCAT('***.***.***-', SUBSTRING(CPF, 10, 3)) AS cpf_ofuscado,
     ServidorPublico.salario,
-    Ministerio.nomeMinisterio,
-    Secretaria.nomeSecretaria,
+    '' as nome_ministerio,
+    Secretaria.nomeSecretaria as nome_secretaria,
     ServidorPublico.funcaoSecretaria,
     ServidorPublico.funcaoMinisterio
 FROM servidorpublico
-JOIN Ministerio ON servidorpublico.codMinisterio = ministerio.codMinisterio
-JOIN Secretaria ON servidorepublico.codSecretaria = secretaria.codSecretaria
+JOIN Secretaria ON servidorpublico.codSecretaria = secretaria.codSecretaria
+UNION
+SELECT
+    CONCAT('***.***.***-', SUBSTRING(CPF, 10, 3)) AS cpf_ofuscado,
+    ServidorPublico.salario,
+    ministerio.nomeministerio as nome_ministerio,
+    '' as nome_secretaria,
+    ServidorPublico.funcaoSecretaria,
+    ServidorPublico.funcaoMinisterio
+FROM servidorpublico
+JOIN ministerio ON servidorpublico.codministerio = ministerio.codministerio
