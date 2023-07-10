@@ -1,14 +1,18 @@
--- CREATE TYPE record AS (
---     nomepessoa VARCHAR(100),
---     salario FLOAT,
---     nomeministerio VARCHAR(100),
---     nomesecretaria VARCHAR(100),
---     funcaoministerio VARCHAR(100),
---     funcaosecretaria VARCHAR(100),
---     nomecargopolitico VARCHAR(100),
---     ufatuacao VARCHAR(2),
---     nomepartido VARCHAR(100)
--- );
+-- entrada: cpf da pesspa
+-- saída: dados respectivos se a pessoa for agente politico ou servidor público
+
+
+CREATE TYPE record AS (
+    nomepessoa VARCHAR(100),
+    salario FLOAT,
+    nomeministerio VARCHAR(100),
+    nomesecretaria VARCHAR(100),
+    funcaoministerio VARCHAR(100),
+    funcaosecretaria VARCHAR(100),
+    nomecargopolitico VARCHAR(100),
+    ufatuacao VARCHAR(2),
+    nomepartido VARCHAR(100)
+);
 
 create or replace function analisarDadosPessoa(f_cpf varchar)
 returns record as
