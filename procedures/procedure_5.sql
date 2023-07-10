@@ -1,4 +1,4 @@
--- entra nome do agente politico
+-- entrada: nome do agente politico
 -- cria se uma cpi no nome dele
 
 -- retorna True: criou-se uma tupla em candidaturacpi
