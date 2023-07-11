@@ -12,11 +12,12 @@ ORDER BY Pessoa.nome ASC;
 
 
 -- 2. Soma dos orçamentos por ministério de todos os governos
-SELECT Ministerio.nomeMinisterio                                                               AS nome_ministerio,
-       IF(SUM(OrcamentoAnual.ValorMinisterio) IS NULL, 0, SUM(OrcamentoAnual.ValorMinisterio)) AS valor_total
+SELECT Ministerio.nomeMinisterio AS nome_ministerio,
+       COALESCE(SUM(OrcamentoAnual.ValorMinisterio), 0) AS valor_total
 FROM OrcamentoAnual
          RIGHT OUTER JOIN Ministerio ON Ministerio.codMinisterio = OrcamentoAnual.codMinisterio
 GROUP BY Ministerio.codMinisterio;
+
 
 
 
@@ -64,15 +65,22 @@ GROUP BY e.regiao;
 
 
 -- 7. Agrupar por partido o nome dos presidentes nos últimos 20 anos
-SELECT Partido.nome AS partido, GROUP_CONCAT(Pessoa.nome, ',') AS nomes_presidentes
+SELECT Partido.nome AS partido,
+STRING_AGG(Pessoa.nome, ',') AS nomes_presidentes
 FROM AgentePolitico
-         JOIN Pessoa ON Pessoa.CPF = AgentePolitico.CPF
-         JOIN CargoPolitico ON CargoPolitico.codCargoPolitico = AgentePolitico.codCargoPolitico
-         JOIN Governo ON Governo.codGoverno = AgentePolitico.codGoverno
-         JOIN Partido ON Partido.codPartido = AgentePolitico.codPartido
+JOIN
+Pessoa ON Pessoa.CPF = AgentePolitico.CPF
+JOIN
+CargoPolitico ON CargoPolitico.codCargoPolitico = AgentePolitico.codCargoPolitico
+JOIN
+Governo ON Governo.codGoverno = AgentePolitico.codGoverno
+JOIN
+Partido ON Partido.codPartido = AgentePolitico.codPartido
 WHERE CargoPolitico.nome = 'Presidente'
-  AND Governo.dataInicioGoverno >= NOW() - INTERVAL 20 YEAR
-GROUP BY AgentePolitico.codPartido;
+AND Governo.dataInicioGoverno >= (NOW() - INTERVAL '20 years')
+GROUP BY Partido.nome;
+
+
 
 
 -- 8. Agrupar, por partido, todos os candidatos à deputado estadual no Rio de Janeiro do ano de 2014
@@ -89,24 +97,32 @@ AND Candidatura.ano = '2014-01-01 00:00:00'
 
 
 -- 9. CPF dos candidatos eleitos na região Nordeste que aprovaram mais de uma lei
-SELECT Candidatura.CPF, Estado.regiao, COUNT(Candidatura.CPF) as quantidade_de_aprovacoes_leis
+SELECT Candidatura.CPF,
+Estado.regiao,
+COUNT(Candidatura.CPF) AS quantidade_de_aprovacoes_leis
 FROM AgentePolitico
-      JOIN Candidatura ON AgentePolitico.CPF = Candidatura.CPF
-	JOIN CargoPolitico ON AgentePolitico.codCargoPolitico = CargoPolitico.codCargoPolitico
-	JOIN Estado on CargoPolitico.UF = Estado.UF
-	JOIN CandidaturaProjetoLei ON CandidaturaProjetoLei.codCandidatura = Candidatura.codCandidatura
+JOIN
+Candidatura ON AgentePolitico.CPF = Candidatura.CPF
+JOIN
+CargoPolitico ON AgentePolitico.codCargoPolitico = CargoPolitico.codCargoPolitico
+JOIN
+Estado ON CargoPolitico.UF = Estado.UF
+JOIN
+CandidaturaProjetoLei ON CandidaturaProjetoLei.codCandidatura = Candidatura.codCandidatura
 WHERE Candidatura.codStatusCandidatura = 1
 AND Estado.regiao = 'Nordeste'
-GROUP BY Candidatura.CPF HAVING COUNT(Candidatura.CPF) >= 1;
+GROUP BY Candidatura.CPF, Estado.regiao
+HAVING COUNT(Candidatura.CPF) >= 1;
+
 
 
 
 -- 10.Média dos salários dos servidores que participaram de secretarias que receberam um orçamento maior ou igual a R$100.000,00.
-SELECT TRUNCATE(AVG(salario), 2) as salario
+SELECT ROUND(CAST(AVG(salario) AS numeric), 2) AS salario
 FROM ServidorPublico
-WHERE codSecretaria IN
-      (SELECT codSecretaria
-       FROM OrcamentoAnual
-       WHERE codSecretaria IS NOT NULL AND OrcamentoAnual.valorSecretaria > 1000000)
+WHERE codSecretaria IN (SELECT codSecretaria
+FROM OrcamentoAnual
+WHERE codSecretaria IS NOT NULL
+AND OrcamentoAnual.valorSecretaria > 1000000);
 
 
