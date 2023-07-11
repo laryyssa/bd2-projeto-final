@@ -97,21 +97,21 @@ INSERT INTO Municipio (codMunicipio, nome, UF) VALUES (8, 'Belem', 'PA');
 INSERT INTO Municipio (codMunicipio, nome, UF) VALUES (9, 'Natal', 'RN');
 INSERT INTO Municipio (codMunicipio, nome, UF) VALUES (10, 'Joao Pessoa', 'PB');
 
-INSERT INTO Ministerio (codMinisterio, nomeMinisterio, statusMinisterio) VALUES (101, 'Ministério do Desenvolvedor', 0);
-INSERT INTO Ministerio (codMinisterio, nomeMinisterio, statusMinisterio) VALUES (405, 'Ministério do Desenvolvimento Regional', 1);
-INSERT INTO Ministerio (codMinisterio, nomeMinisterio, statusMinisterio) VALUES (455, 'Ministério das Comunicações', 0);
-INSERT INTO Ministerio (codMinisterio, nomeMinisterio, statusMinisterio) VALUES (529, 'Ministério da Saúde', 1);
-INSERT INTO Ministerio (codMinisterio, nomeMinisterio, statusMinisterio) VALUES (643, 'Ministério do Meio Ambiente', 1);
-INSERT INTO Ministerio (codMinisterio, nomeMinisterio, statusMinisterio) VALUES (738, 'Ministério da Agricultura', 0);
-INSERT INTO Ministerio (codMinisterio, nomeMinisterio, statusMinisterio) VALUES (787, 'Ministério dos Direitos Humanos', 1);
-INSERT INTO Ministerio (codMinisterio, nomeMinisterio, statusMinisterio) VALUES (807, 'Ministério da Economia', 1);
-INSERT INTO Ministerio (codMinisterio, nomeMinisterio, statusMinisterio) VALUES (813, 'Minitério da Cidadania', 0);
-INSERT INTO Ministerio (codMinisterio, nomeMinisterio, statusMinisterio) VALUES (844, 'Ministério do Turismo', 1);
-INSERT INTO Ministerio (codMinisterio, nomeMinisterio, statusMinisterio) VALUES (874, 'Ministério da Arte e Cultura', 0);
-INSERT INTO Ministerio (codMinisterio, nomeMinisterio, statusMinisterio) VALUES (876, 'Ministério da Defesa', 0);
-INSERT INTO Ministerio (codMinisterio, nomeMinisterio, statusMinisterio) VALUES (883, 'Ministério da Educação', 1);
-INSERT INTO Ministerio (codMinisterio, nomeMinisterio, statusMinisterio) VALUES (937, 'Ministério da Infraestrutura', 1);
-INSERT INTO Ministerio (codMinisterio, nomeMinisterio, statusMinisterio) VALUES (967, 'Ministério das Relações Exteriores', 1);
+INSERT INTO Ministerio (codMinisterio, nomeMinisterio, statusMinisterio) VALUES (101, 'Ministério do Desenvolvedor', false);
+INSERT INTO Ministerio (codMinisterio, nomeMinisterio, statusMinisterio) VALUES (405, 'Ministério do Desenvolvimento Regional', true);
+INSERT INTO Ministerio (codMinisterio, nomeMinisterio, statusMinisterio) VALUES (455, 'Ministério das Comunicações', false);
+INSERT INTO Ministerio (codMinisterio, nomeMinisterio, statusMinisterio) VALUES (529, 'Ministério da Saúde', true);
+INSERT INTO Ministerio (codMinisterio, nomeMinisterio, statusMinisterio) VALUES (643, 'Ministério do Meio Ambiente', true);
+INSERT INTO Ministerio (codMinisterio, nomeMinisterio, statusMinisterio) VALUES (738, 'Ministério da Agricultura', false);
+INSERT INTO Ministerio (codMinisterio, nomeMinisterio, statusMinisterio) VALUES (787, 'Ministério dos Direitos Humanos', true);
+INSERT INTO Ministerio (codMinisterio, nomeMinisterio, statusMinisterio) VALUES (807, 'Ministério da Economia', true);
+INSERT INTO Ministerio (codMinisterio, nomeMinisterio, statusMinisterio) VALUES (813, 'Minitério da Cidadania', false);
+INSERT INTO Ministerio (codMinisterio, nomeMinisterio, statusMinisterio) VALUES (844, 'Ministério do Turismo', true);
+INSERT INTO Ministerio (codMinisterio, nomeMinisterio, statusMinisterio) VALUES (874, 'Ministério da Arte e Cultura', false);
+INSERT INTO Ministerio (codMinisterio, nomeMinisterio, statusMinisterio) VALUES (876, 'Ministério da Defesa', false);
+INSERT INTO Ministerio (codMinisterio, nomeMinisterio, statusMinisterio) VALUES (883, 'Ministério da Educação', true);
+INSERT INTO Ministerio (codMinisterio, nomeMinisterio, statusMinisterio) VALUES (937, 'Ministério da Infraestrutura', true);
+INSERT INTO Ministerio (codMinisterio, nomeMinisterio, statusMinisterio) VALUES (967, 'Ministério das Relações Exteriores', true);
 
 INSERT INTO Secretaria (codSecretaria, nomeSecretaria, codMinisterio) VALUES (108, 'Fomento e Parcerias com o Setor Privado', 405); --
 INSERT INTO Secretaria (codSecretaria, nomeSecretaria, codMinisterio) VALUES (195, 'Secretaria da Educação Superior', 883);
